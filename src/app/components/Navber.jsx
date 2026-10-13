@@ -1,8 +1,7 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/app/lib/auth-client";
 import { Avatar, Button } from "@heroui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -37,15 +36,6 @@ const Navber = () => {
         {/* Logo */}
         <Link href="/" onClick={closeMenu}>
           <div className="flex items-center gap-2">
-            <Image
-              src="/logo.png"
-              alt="Tiles Gallery logo"
-              width={40}
-              height={40}
-              priority
-              className="h-9 w-9 object-contain sm:h-10 sm:w-10"
-            />
-
             <h3 className="text-base font-black sm:text-lg">
               Tiles Gallery
             </h3>
