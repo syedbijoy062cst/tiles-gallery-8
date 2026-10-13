@@ -1,6 +1,15 @@
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 
-const Footer = () => {
+async function getCopyrightYear() {
+  "use cache";
+  cacheLife("days");
+  return new Date().getFullYear();
+}
+
+const Footer = async () => {
+  const copyrightYear = await getCopyrightYear();
+
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-gray-200 bg-white">
       {/* Background Glow */}
@@ -200,7 +209,7 @@ const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
 
           <p>
-            © {new Date().getFullYear()} Tiles Gallery. All rights reserved.
+            © {copyrightYear} Tiles Gallery. All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">
