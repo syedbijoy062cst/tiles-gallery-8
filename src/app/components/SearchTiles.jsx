@@ -24,8 +24,6 @@ const SearchTiles = ({ tiles }) => {
           size="lg"
           variant="bordered"
           radius="lg"
-          isClearable
-          onClear={() => setSearch("")}
         />
       </div>
 
