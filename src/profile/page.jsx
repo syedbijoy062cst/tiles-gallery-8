@@ -1,9 +1,9 @@
 "use client";
 
 import { Avatar, Card } from "@heroui/react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/app/lib/auth-client";
 import React from "react";
-import { UpdateUserModal } from "@/components/UpdateUserModal";
+import { UpdateUserModal } from "@/app/components/UpdateUserModel";
 
 const ProfilePage = () => {
   const userData = authClient.useSession();
