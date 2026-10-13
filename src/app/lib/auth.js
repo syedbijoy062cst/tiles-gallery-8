@@ -2,7 +2,15 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+  throw new Error(
+    "Missing MONGODB_URI. Add your MongoDB connection string to .env.local and restart the Next.js server."
+  );
+}
+
+const client = new MongoClient(mongoUri);
 const db = client.db("tiles-gallery");
 
 export const auth = betterAuth({
