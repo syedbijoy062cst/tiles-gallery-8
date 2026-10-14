@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +6,6 @@ const Banner = () => {
   return (
     <section className="w-full overflow-hidden bg-[#f8f5f0]">
       <div className="mx-auto flex w-full max-w-7xl flex-col lg:grid lg:grid-cols-2">
-
         {/* Image */}
         <div className="relative order-1 h-[230px] w-full sm:h-[320px] md:h-[400px] lg:order-2 lg:h-[600px]">
           <Image
@@ -21,7 +21,6 @@ const Banner = () => {
         {/* Content */}
         <div className="order-2 flex w-full items-center px-5 py-10 sm:px-8 sm:py-14 md:px-10 md:py-16 lg:order-1 lg:px-12 lg:py-20">
           <div className="w-full">
-
             <p className="mb-3 text-xs font-semibold uppercase tracking-[2px] text-pink-600 sm:text-sm sm:tracking-[3px]">
               Premium Tiles Collection
             </p>
@@ -46,10 +45,8 @@ const Banner = () => {
               Browse Now
               <span className="text-lg">→</span>
             </Link>
-
           </div>
         </div>
-
       </div>
     </section>
   );

@@ -2,7 +2,6 @@
 
 import { authClient } from "@/app/lib/auth-client";
 import { Avatar, Button } from "@heroui/react";
-import logoImage from "../../public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -41,7 +40,7 @@ const Navber = () => {
         <Link href="/" onClick={closeMenu}>
           <div className="flex items-center gap-2">
             <Image
-              src={logoImage}
+              src="/logo.png"
               alt="Tiles Gallery logo"
               width={40}
               height={40}
