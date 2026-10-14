@@ -2,39 +2,70 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
-const mongoUri = process.env.MONGODB_URI;
+const runtimeCache = globalThis;
 
-if (!mongoUri) {
-  throw new Error(
-    "Missing MONGODB_URI. Add your MongoDB connection string to .env.local and restart the Next.js server."
-  );
+export class AuthConfigurationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "AuthConfigurationError";
+  }
 }
 
-const client = new MongoClient(mongoUri);
-const db = client.db("tiles-gallery");
+export function getAuth() {
+  const mongoUri = process.env.MONGODB_URI;
+  const secret = process.env.BETTER_AUTH_SECRET;
 
-export const auth = betterAuth({
-  database: mongodbAdapter(db, {
-    client
-  }),
+  if (!mongoUri) {
+    throw new AuthConfigurationError(
+      "Authentication is not configured: MONGODB_URI is missing."
+    );
+  }
 
-   emailAndPassword: { 
-    enabled: true, 
-  },
+  if (!secret || secret.length < 32) {
+    throw new AuthConfigurationError(
+      "Authentication is not configured: BETTER_AUTH_SECRET must be at least 32 characters."
+    );
+  }
 
-  socialProviders : {
-    google : {
-          clientId: process.env.GOOGLE_CLIENT_ID ,
-          clientSecret:  process.env.GOOGLE_CLIENT_SECRET,
-          prompt: "select_account",
+  if (!runtimeCache.tilesGalleryAuth) {
+    const client =
+      runtimeCache.tilesGalleryMongoClient ||
+      new MongoClient(mongoUri, { maxPoolSize: 10 });
+    runtimeCache.tilesGalleryMongoClient = client;
+
+    const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+    if (Boolean(googleClientId) !== Boolean(googleClientSecret)) {
+      throw new AuthConfigurationError(
+        "Authentication is not configured: set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, or leave both unset."
+      );
     }
-  },
-    account: {
-    accountLinking: {
-      enabled: true,
-      trustedProviders: ["google"],
-    },
-  },
 
+    runtimeCache.tilesGalleryAuth = betterAuth({
+      baseURL: process.env.BETTER_AUTH_URL,
+      secret,
+      database: mongodbAdapter(client.db("tiles-gallery"), { client }),
+      emailAndPassword: {
+        enabled: true,
+      },
+      socialProviders: googleClientId
+        ? {
+            google: {
+              clientId: googleClientId,
+              clientSecret: googleClientSecret,
+              prompt: "select_account",
+            },
+          }
+        : {},
+      account: {
+        accountLinking: {
+          enabled: true,
+          trustedProviders: ["google"],
+        },
+      },
+    });
+  }
 
-});
+  return runtimeCache.tilesGalleryAuth;
+}
