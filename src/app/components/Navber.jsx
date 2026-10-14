@@ -2,12 +2,15 @@
 
 import { authClient } from "@/app/lib/auth-client";
 import { Avatar, Button } from "@heroui/react";
+import logoImage from "../../public/logo.png";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Navber = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const userData = authClient.useSession();
@@ -16,7 +19,8 @@ const Navber = () => {
   const handleLogOut = async () => {
     await authClient.signOut();
     setIsMenuOpen(false);
-  };
+    router.push("/auth/login");
+  }; 
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -36,6 +40,14 @@ const Navber = () => {
         {/* Logo */}
         <Link href="/" onClick={closeMenu}>
           <div className="flex items-center gap-2">
+            <Image
+              src={logoImage}
+              alt="Tiles Gallery logo"
+              width={40}
+              height={40}
+              priority
+              className="h-9 w-9 object-contain sm:h-10 sm:w-10"
+            />
             <h3 className="text-base font-black sm:text-lg">
               Tiles Gallery
             </h3>
@@ -71,7 +83,11 @@ const Navber = () => {
 
         {/* Desktop User */}
         <div className="hidden items-center gap-3 md:flex">
-          {!user ? (
+          {userData.isPending ? (
+            <span className="text-sm text-gray-500" role="status">
+              Checking session...
+            </span>
+          ) : !user ? (
             <Link
               href="/auth/login"
               className={navLinkClass("/auth/login")}
@@ -148,7 +164,11 @@ const Navber = () => {
             </Link>
 
             {/* Login */}
-            {!user && (
+            {userData.isPending ? (
+              <span className="px-3 py-2 text-sm text-gray-500" role="status">
+                Checking session...
+              </span>
+            ) : !user ? (
               <Link
                 href="/auth/login"
                 onClick={closeMenu}
@@ -156,7 +176,7 @@ const Navber = () => {
               >
                 Log In
               </Link>
-            )}
+            ) : null}
 
             {/* User info */}
             {user && (
