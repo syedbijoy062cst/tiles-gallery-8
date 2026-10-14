@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -17,7 +18,7 @@ import {
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/app/lib/auth-client";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -32,20 +33,20 @@ export default function RegisterPage() {
     setErrorMessage("");
     setLoading(true);
 
-    const name = e.target.name.value;
-    const image = e.target.image.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const formData = new FormData(e.currentTarget);
+
+    const name = formData.get("name")?.toString().trim();
+    const image = formData.get("image")?.toString().trim();
+    const email = formData.get("email")?.toString().trim();
+    const password = formData.get("password")?.toString();
 
     try {
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         name,
         image,
         password,
         email,
       });
-
-      console.log({ data, error });
 
       if (error) {
         const message =
@@ -58,11 +59,9 @@ export default function RegisterPage() {
 
       toast.success("Registration successful! 🎉");
 
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 1000);
+      router.push("/auth/login");
     } catch (error) {
-      console.error(error);
+      console.error("Registration error:", error);
 
       setErrorMessage("Something went wrong. Please try again.");
       toast.error("Registration failed. Please try again.");
@@ -72,16 +71,25 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSignUp = async () => {
-    try {
-      setErrorMessage("");
-      setGoogleLoading(true);
+    setErrorMessage("");
+    setGoogleLoading(true);
 
-      await authClient.signIn.social({
+    try {
+      const { error } = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/",
       });
+
+      if (error) {
+        const message =
+          error.message || "Google sign up failed. Please try again.";
+
+        setErrorMessage(message);
+        toast.error(message);
+        setGoogleLoading(false);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Google sign-up error:", error);
 
       setErrorMessage("Google sign up failed. Please try again.");
       toast.error("Google sign up failed. Please try again.");
@@ -92,7 +100,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
       <Card className="mx-auto w-full max-w-xl border px-4 py-8 sm:px-8 sm:py-10">
-        
         {/* Title */}
         <h1 className="mb-6 text-center text-2xl font-bold sm:text-3xl">
           Register
@@ -111,16 +118,34 @@ export default function RegisterPage() {
           )}
 
           {/* Name */}
-          <TextField isRequired name="name" type="text" className="w-full">
+          <TextField
+            isRequired
+            name="name"
+            type="text"
+            className="w-full"
+          >
             <Label>Name</Label>
-            <Input placeholder="Enter your name" />
+            <Input
+              name="name"
+              type="text"
+              placeholder="Enter your name"
+            />
             <FieldError />
           </TextField>
 
           {/* Image */}
-          <TextField isRequired name="image" type="text" className="w-full">
+          <TextField
+            isRequired
+            name="image"
+            type="url"
+            className="w-full"
+          >
             <Label>Image URL</Label>
-            <Input placeholder="Enter image URL" />
+            <Input
+              name="image"
+              type="url"
+              placeholder="https://example.com/image.jpg"
+            />
             <FieldError />
           </TextField>
 
@@ -141,7 +166,11 @@ export default function RegisterPage() {
             }}
           >
             <Label>Email</Label>
-            <Input placeholder="john@example.com" />
+            <Input
+              name="email"
+              type="email"
+              placeholder="john@example.com"
+            />
             <FieldError />
           </TextField>
 
@@ -169,7 +198,11 @@ export default function RegisterPage() {
             }}
           >
             <Label>Password</Label>
-            <Input placeholder="Enter your password" />
+            <Input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+            />
 
             <Description>
               Must be at least 8 characters with 1 uppercase and 1 number
@@ -183,7 +216,7 @@ export default function RegisterPage() {
             <Button
               className="w-full bg-pink-500 text-white sm:w-auto"
               type="submit"
-              isDisabled={loading}
+              isDisabled={loading || googleLoading}
             >
               {loading ? "Creating Account..." : "Submit"}
             </Button>
@@ -192,6 +225,7 @@ export default function RegisterPage() {
               className="w-full text-pink-500 sm:w-auto"
               type="reset"
               variant="secondary"
+              isDisabled={loading || googleLoading}
               onPress={() => setErrorMessage("")}
             >
               Reset
@@ -215,7 +249,11 @@ export default function RegisterPage() {
         {/* Divider */}
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-gray-300" />
-          <span className="text-sm font-semibold text-gray-500">or</span>
+
+          <span className="text-sm font-semibold text-gray-500">
+            or
+          </span>
+
           <div className="h-px flex-1 bg-gray-300" />
         </div>
 
@@ -225,13 +263,10 @@ export default function RegisterPage() {
             onPress={handleGoogleSignUp}
             variant="outline"
             className="w-full"
-            isDisabled={googleLoading}
+            isDisabled={googleLoading || loading}
           >
             <BsGoogle />
-
-            {googleLoading
-              ? "Connecting..."
-              : "Sign up with Google"}
+            {googleLoading ? "Connecting..." : "Sign up with Google"}
           </Button>
         </div>
       </Card>

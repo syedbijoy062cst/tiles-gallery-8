@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { cacheLife } from "next/cache";
 
@@ -13,12 +14,11 @@ const Footer = async () => {
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-gray-200 bg-white">
       {/* Background Glow */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-pink-500/5 via-transparent to-purple-500/5" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-pink-500/5 via-transparent to-purple-500/5" />
 
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
         {/* Main Footer */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
-
           {/* Brand */}
           <div>
             <Link href="/" className="inline-block">
@@ -39,6 +39,7 @@ const Footer = async () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-700 transition hover:bg-pink-600 hover:text-white"
               >
                 f
@@ -48,6 +49,7 @@ const Footer = async () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-700 transition hover:bg-pink-600 hover:text-white"
               >
                 ig
@@ -57,6 +59,7 @@ const Footer = async () => {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-700 transition hover:bg-pink-600 hover:text-white"
               >
                 GH
@@ -66,6 +69,7 @@ const Footer = async () => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-700 transition hover:bg-pink-600 hover:text-white"
               >
                 in
@@ -81,14 +85,10 @@ const Footer = async () => {
 
             <ul className="space-y-3 text-sm text-gray-600">
               <li>
-                <Link
-                  href="/"
-                  className="transition hover:text-pink-600"
-                >
+                <Link href="/" className="transition hover:text-pink-600">
                   Home
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/all-tiles"
@@ -97,7 +97,6 @@ const Footer = async () => {
                   All Tiles
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/about"
@@ -106,7 +105,6 @@ const Footer = async () => {
                   About Us
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/contact"
@@ -133,7 +131,6 @@ const Footer = async () => {
                   Ceramic Tiles
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/all-tiles"
@@ -142,7 +139,6 @@ const Footer = async () => {
                   Marble Tiles
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/all-tiles"
@@ -151,7 +147,6 @@ const Footer = async () => {
                   Porcelain Tiles
                 </Link>
               </li>
-
               <li>
                 <Link
                   href="/all-tiles"
@@ -170,34 +165,28 @@ const Footer = async () => {
             </h3>
 
             <ul className="space-y-4 text-sm text-gray-600">
-
               <li>
                 <span className="font-semibold text-gray-900">
                   📍 Address
                 </span>
-                <p className="mt-1">
-                  Sylhet, Bangladesh
-                </p>
+                <p className="mt-1">Sylhet, Bangladesh</p>
               </li>
 
               <li>
                 <span className="font-semibold text-gray-900">
                   📞 Phone
                 </span>
-                <p className="mt-1">
-                  +880 1XXX-XXXXXX
-                </p>
+                <p className="mt-1">+880 1XXX-XXXXXX</p>
               </li>
 
               <li>
                 <span className="font-semibold text-gray-900">
                   ✉️ Email
                 </span>
-                <p className="mt-1">
+                <p className="mt-1 break-words">
                   support@tilesgallery.com
                 </p>
               </li>
-
             </ul>
           </div>
         </div>
@@ -206,13 +195,12 @@ const Footer = async () => {
         <div className="my-10 h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
         {/* Bottom Footer */}
-        <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
-
+        <div className="flex flex-col items-center justify-between gap-4 text-center text-sm text-gray-500 md:flex-row md:text-left">
           <p>
             © {copyrightYear} Tiles Gallery. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link
               href="/privacy"
               className="transition hover:text-pink-600"
@@ -224,10 +212,9 @@ const Footer = async () => {
               href="/terms"
               className="transition hover:text-pink-600"
             >
-              Terms & Conditions
+              Terms &amp; Conditions
             </Link>
           </div>
-
         </div>
       </div>
     </footer>
