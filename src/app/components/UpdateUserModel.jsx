@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/app/lib/auth-client";
 import {Envelope} from "@gravity-ui/icons";
 import {Button, Input, Label, Modal, Surface, TextField} from "@heroui/react";
 import { BiEdit, BiUser } from "react-icons/bi";
@@ -25,11 +25,17 @@ export function UpdateUserModal() {
     }
   return (
     <Modal>
-      <Button className="text-pink-500" variant="secondary"><BiEdit></BiEdit> Update Profile</Button>
+      <Button
+        className="text-pink-500"
+        variant="secondary"
+        aria-label="Open update profile modal"
+      >
+        <BiEdit></BiEdit> Update Profile
+      </Button>
       <Modal.Backdrop>
         <Modal.Container placement="auto">
           <Modal.Dialog className="sm:max-w-md">
-            <Modal.CloseTrigger />
+            <Modal.CloseTrigger aria-label="Close update profile modal" />
             <Modal.Header>
               <Modal.Icon className="bg-pink-500-soft text-pink-soft-foreground">
                 <BiUser className="size-5" />
