@@ -4,11 +4,11 @@ Tiles Gallery is a modern and responsive tile showcase website where users can e
 
 ## 🌐 Live Website
 
-🔗 **Live Demo:**
+🔗 **Live Demo:** https://tiles-gallery-8-syedbijoy062-5995s-projects.vercel.app
 
 ## 📂 GitHub Repository
 
-🔗 **GitHub:**
+🔗 **GitHub:** [Tiles Gallery](https://github.com/syedbijoy062cst/tiles-gallery-8)
 
 ---
 
